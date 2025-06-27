@@ -345,29 +345,20 @@ footer {
 <script>
   fetch("navbar.html")
     .then(res => res.text())
-    .then(html => {
-      document.getElementById("navbar-placeholder").innerHTML = html;
-
-      // Reattach toggleMenu function
-      window.toggleMenu = () => {
+    .then(html => document.getElementById("navbar-placeholder").innerHTML = html)
+    .then(() => {
+      // Reattach JS if needed
+      const toggleMenu = () => {
         const nav = document.getElementById("navLinks");
         const toggle = document.querySelector(".menu-toggle");
         nav.classList.toggle("show");
         toggle.classList.toggle("open");
       };
-
-      // Setup haze transitions on injected links
-    
-            const haze = document.getElementById("haze-transition");
-            haze.classList.add("active");
-            setTimeout(() => {
-              window.location.href = href;
-            }, 800); // match transition duration
-          });
-        }
-      });
+      window.toggleMenu = toggleMenu;
     });
 </script>
+
+
 
 
 
