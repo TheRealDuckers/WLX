@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Dark Theatre Site</title>
+  <style>
+    /* Loader */
+    #loader-wrapper {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: radial-gradient(ellipse at center, #121212 0%, #000000 100%);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+      overflow: hidden;
+      transition: opacity 0.6s ease;
+    }
+
+    #moving-light {
+      width: 300px;
+      height: 300px;
+      background: radial-gradient(ellipse at center, rgba(0, 188, 212, 0.3) 0%, rgba(0, 188, 212, 0) 70%);
+      border-radius: 50%;
+      animation: panLight 2.5s ease-in-out infinite alternate;
+      transform: translateX(-50%);
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .spotlight-logo {
+      width: 100px;
+      height: auto;
+      opacity: 0.85;
+      z-index: 2;
+    }
+
+    #fixture {
+      width: 40px;
+      height: 60px;
+      background: #222;
+      border-radius: 6px;
+      margin-top: 20px;
+      box-shadow: inset 0 -2px 5px rgba(0, 0, 0, 0.6);
+    }
+
+    @keyframes panLight {
+      from { transform: translateX(-50%) rotate(-30deg); }
+      to { transform: translateX(50%) rotate(30deg); }
+    }
+
+    body.loaded #loader-wrapper {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    /* Haze transition */
+    #haze-transition {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0, 0, 0, 0.3);
+      pointer-events: none;
+      z-index: 9998;
+      opacity: 0;
+      transition: opacity 0.8s ease;
+      overflow: hidden;
+    }
+
+    #haze-transition.active {
+      opacity: 1;
+      pointer-events: all;
+    }
+
+    .haze-layer {
+      position: absolute;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle at center, rgba(200,200,200,0.04) 0%, rgba(0,0,0,0) 80%);
+      animation: drift 12s linear infinite alternate;
+      filter: blur(10px);
+      transform: rotate(-15deg);
+    }
+
+    @keyframes drift {
+      0%   { transform: translate(-10%, -10%) rotate(-10deg); }
+      100% { transform: translate(10%, 10%) rotate(10deg); }
+    }
+
+    /* Main site layout */
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #121212;
+      color: #ffffff;
+      overflow-x: hidden;
+    }
+
+    nav {
+      background-color: #1f1f1f;
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.5);
+    }
+
+    .logo {
+      font-size: 1.5rem;
+      font-weight: bold;
+    }
+
+    .menu-toggle {
+      display: none;
+      font-size: 1.8rem;
+      background: none;
+      border: none;
+      color: #fff;
+      cursor: pointer;
+      margin-left: auto;
+      transition: transform 0.3s ease;
+    }
+
+    .menu-toggle.open {
+      transform: rotate(90deg);
+    }
+
+    .nav-links {
+      display: flex;
+    }
+
+    .nav-links a {
+      color: #ffffff;
+      text-decoration: none;
+      margin: 0 1rem;
+      transition: color 0.3s ease;
+    }
+
+    .nav-links a:hover {
+      color: #00bcd4;
+    }
+
+    header {
+      height: 300px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: #2a2a2a;
+      text-align: center;
+      animation: fadeIn 1.5s ease-in-out;
+    }
+
+    header h1 {
+      font-size: 2.5rem;
+    }
+
+    .scrolling-text-container {
+      overflow: hidden;
+      background-color: #2a2a2a;
+      padding: 1rem 0;
+      position: relative;
+    }
+
+    .scrolling-text {
+      display: inline-block;
+      white-space: nowrap;
+      animation: scrollText 40s linear infinite;
+      font-size: 1.5rem;
+      padding-left: 100%;
+    }
+
+    .scrolling-text span {
+      color: #ffffff;
+      padding: 0 2rem;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes scrollText {
+      from { transform: translateX(0); }
+      to { transform: translateX(-100%); }
+    }
+
+    @media (max-width: 768px) {
+      .menu-toggle {
+        display: block;
+      }
+
+      .nav-links {
+        flex-direction: column;
+        width: 100%;
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.4s ease-in-out;
+        background-color: #1f1f1f;
+      }
+
+      .nav-links.show {
+        max-height: 500px;
+      }
+
+      .nav-links a {
+        margin: 0.75rem 1rem;
+      }
+
+      header {
+        height: 200px;
+        padding: 0 1rem;
+      }
+
+      header h1 {
+        font-size: 2rem;
+      }
+    }
+   .content {
+  padding: 2rem 1.5rem;
+  max-width: 1100px;
+  margin: auto;
+}
+
+section {
+  margin-bottom: 3rem;
+}
+
+h2 {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+  color: #00bcd4;
+}
+
+p {
+  line-height: 1.6;
+  color: #ddd;
+}
+
+.card-grid {
+  display: flex;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.card {
+  flex: 1 1 300px;
+  background: #1e1e1e;
+  padding: 1.5rem;
+  border-radius: 10px;
+  transition: transform 0.3s;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  background: #272727;
+}
+
+footer {
+  text-align: center;
+  padding: 2rem 1rem;
+  background: #1a1a1a;
+  border-top: 1px solid #333;
+  font-size: 0.9rem;
+  color: #888;
+}
+.button {
+  background-color: #00bcd4;
+  color: #121212;
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  font-weight: bold;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.3s, transform 0.2s, box-shadow 0.2s;
+  box-shadow: 0 4px 10px rgba(0, 188, 212, 0.3);
+  text-decoration: none;
+  display: inline-block;
+}
+
+.button:hover {
+  background-color: #26dbe3;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 14px rgba(0, 188, 212, 0.4);
+}
+
+.button:active {
+  transform: scale(0.97);
+  box-shadow: 0 3px 6px rgba(0, 188, 212, 0.2);
+}
+
+.buttonC {
+  background-color: #00bcd4;
+  color: #121212;
+  padding: 0.5rem 0.5rem;
+  font-size: 0.8rem;
+  font-weight: bold;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.3s, transform 0.2s, box-shadow 0.2s;
+  box-shadow: 0 4px 10px rgba(0, 188, 212, 0.3);
+  text-decoration: none;
+  display: inline-block;
+}
+
+.buttonC:hover {
+  background-color: #26dbe3;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 14px rgba(0, 188, 212, 0.4);
+}
+
+.buttonC:active {
+  transform: scale(0.97);
+  box-shadow: 0 3px 6px rgba(0, 188, 212, 0.2);
+}
+
+  </style>
+</head>
+<body>
+  <!-- Loader -->
+  <div id="loader-wrapper">
+    <div id="moving-light">
+      <img src="https://via.placeholder.com/100x100?text=Logo" alt="Logo" class="spotlight-logo" />
+    </div>
+    <div id="fixture"></div>
+  </div>
+
+  <!-- Haze transition overlay -->
+  <div id="haze-transition">
+    <div class="haze-layer"></div>
+  </div>
+
+  <!-- Navigation -->
+  <nav>
+    <div class="logo">WLX Productions </div>
+    <button class="menu-toggle" onclick="toggleMenu()">☰</button>
+    <div class="nav-links" id="navLinks">
+      <a href="#">Home</a>
+      <a href="theatre.html">Theatre Gear</a>
+      <a href="#">Contact</a>
+    </div>
+  </nav>
+
+  <!-- Header -->
+  <header>
+    <img src="https://wlxproductions.co.uk/wp-content/uploads/2012/05/logo1-W-47.png">
+  </header>
+
+  <!-- Scrolling Banner -->
+  <div class="scrolling-text-container">
+    <div class="scrolling-text">
+      <span>Speakers, Amplifiers, Consoles, Control Equipment, FX Units, In Ear Monitors, Radio Microphones, Wired Microphones, Playback & Recording, Stands, Comms. inc Radios, AV Equipment, Audio Multicore Systems, Audio Cables, AV Cables, Mains Cables, Heavy Mains Cable, Multicore Cable, Mains Distribution Systems, Lanterns, Moving Lights, Effects, LED, Colour Changers, Lighting Control Cables, Lighting Desks, Dimmers, Access Equipment, Lighting Kits, Disco Packages, Truss, Dance Floor, Staging, Outdoor Concert Staging, Drapes and Set, Props, Servicing and PAT Testing ( Portable Appliance Testing)</span>
+    </div>
+  </div>
+
+
+<main class="content">
+  <section class="about">
+    <h2>About Us</h2>
+    <p>WLX Productions strives to provide the highest standards in all aspects of AV, lighting, sound and staging, as well as theatrical servicing, installation, inspection and testing. We take pride in providing quality solutions efficiently, professionally and with the attention to detail that our clients expect.  From dry hire to full technical event management, we can help.
+
+We have a wealth of experience in providing complete turnkey packages for our clients. Our professionals undertake the design, supply and realisation of your project. For concert halls, theatres, conferences, schools and parties, we can bring you the custom installation you require to meet your needs.</p>
+  </section>
+
+  <section class="features">
+    <h2>Our Services</h2>
+    <div class="card-grid">
+      <div class="card">
+        <h3>Lighting and Sound Hire</h3>
+        <p>WLX stocks a wide range of equipment for dry hire.  All equipment is regularly serviced and undergoes regular PAT testing, to ensure maximum quality for our hirers.</p>
+        <a href="#" class="button">Hire Info and Catalouge</a>
+
+      </div>
+      <div class="card">
+        <h3>Parties/Events</h3>
+        <p>WLX can provide a full range of party essentials. From full DJ packages and table lighting systems to LED uplighters, garden lighting, power and photography. We can bring that something special to your event. Having one company to look after all these aspects of your event means peace of mind for you on the day.</p>
+        <a href="#" class="button">Parties and Events</a>
+
+      </div>
+      <div class="card">
+        <h3>Servicing</h3>
+        <p>WLX Productions has an experienced servicing department.  We are able to offer full servicing of technical equipment including PAT testing and certification where needed.  Drop us an email to discuss your needs.</p>
+        <a href="#" class="button">Learn More</a>
+
+      </div>
+     <div class="card">
+        <h3>Education</h3>
+        <p>WLX offers on site training for staff and students at schools and colleges in the theory and use of lighting and sound equipment.  We come to you so that we can show you how to get the best out of the equipment you already own.
+</p>
+<a href="#" class="button">Learn More</a>
+
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <p>&copy; 2025 Duckers Design. All rights reserved.</p>
+  <p>Site by <a class="buttonC" href="https://duckwhizz.uk/duckers-design">Duckers Design</a>
+</footer>
+
+  <!-- Scripts -->
+  <script>
+    // Simulate 3-second load for demo
+    window.addEventListener("load", () => {
+      setTimeout(() => {
+        document.body.classList.add("loaded");
+      }, 300);
+    });
+
+    function toggleMenu() {
+      const nav = document.getElementById("navLinks");
+      const toggle = document.querySelector(".menu-toggle");
+      nav.classList.toggle("show");
+      toggle.classList.toggle("open");
+    }
+
+    // Haze transition on page change
+    const links = document.querySelectorAll("a[href]");
+
+    links.forEach(link => {
+      const href = link.getAttribute("href");
+      if (href && !href.startsWith("#") && !href.startsWith("javascript")) {
+        link.addEventListener("click", (e) => {
+          e.preventDefault();
+          const haze = document.getElementById("haze-transition");
+          haze.classList.add("active");
+          setTimeout(() => {
+            window.location.href = href;
+          }, 800);
+        });
+      }
+    });
+  </script>
