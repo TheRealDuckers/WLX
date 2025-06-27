@@ -357,12 +357,7 @@ footer {
       };
 
       // Setup haze transitions on injected links
-      const links = document.querySelectorAll("nav a[href]");
-      links.forEach(link => {
-        const href = link.getAttribute("href");
-        if (href && !href.startsWith("#") && !href.startsWith("javascript")) {
-          link.addEventListener("click", (e) => {
-            e.preventDefault();
+    
             const haze = document.getElementById("haze-transition");
             haze.classList.add("active");
             setTimeout(() => {
