@@ -345,18 +345,35 @@ footer {
 <script>
   fetch("navbar.html")
     .then(res => res.text())
-    .then(html => document.getElementById("navbar-placeholder").innerHTML = html)
-    .then(() => {
-      // Reattach JS if needed
-      const toggleMenu = () => {
+    .then(html => {
+      document.getElementById("navbar-placeholder").innerHTML = html;
+
+      // Reattach toggleMenu function
+      window.toggleMenu = () => {
         const nav = document.getElementById("navLinks");
         const toggle = document.querySelector(".menu-toggle");
         nav.classList.toggle("show");
         toggle.classList.toggle("open");
       };
-      window.toggleMenu = toggleMenu;
+
+      // Setup haze transitions on injected links
+      const links = document.querySelectorAll("nav a[href]");
+      links.forEach(link => {
+        const href = link.getAttribute("href");
+        if (href && !href.startsWith("#") && !href.startsWith("javascript")) {
+          link.addEventListener("click", (e) => {
+            e.preventDefault();
+            const haze = document.getElementById("haze-transition");
+            haze.classList.add("active");
+            setTimeout(() => {
+              window.location.href = href;
+            }, 800); // match transition duration
+          });
+        }
+      });
     });
 </script>
+
 
 
   <!-- Header -->
