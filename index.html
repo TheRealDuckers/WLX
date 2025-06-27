@@ -341,17 +341,23 @@ footer {
   </div>
 
   <!-- Navigation -->
-  <nav>
-    <div class="logo">WLX Productions </div>
-    <button class="menu-toggle" onclick="toggleMenu()">☰</button>
-    <div class="nav-links" id="navLinks">
-      <a href="#">Home</a>
-      <a href="theatre.html">Hire</a>
-      <a href="#">Training</a>
-      <a href="#">Parties</a>
-      <a href="#">Contact Us</a>
-    </div>
-  </nav>
+<div id="navbar-placeholder"></div>
+<script>
+  fetch("navbar.html")
+    .then(res => res.text())
+    .then(html => document.getElementById("navbar-placeholder").innerHTML = html)
+    .then(() => {
+      // Reattach JS if needed
+      const toggleMenu = () => {
+        const nav = document.getElementById("navLinks");
+        const toggle = document.querySelector(".menu-toggle");
+        nav.classList.toggle("show");
+        toggle.classList.toggle("open");
+      };
+      window.toggleMenu = toggleMenu;
+    });
+</script>
+
 
   <!-- Header -->
   <header>
