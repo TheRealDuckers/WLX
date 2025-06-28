@@ -436,20 +436,12 @@ We have a wealth of experience in providing complete turnkey packages for our cl
       toggle.classList.toggle("open");
     }
 
-    // Haze transition on page change
-    const links = document.querySelectorAll("a[href]");
-
-    links.forEach(link => {
-      const href = link.getAttribute("href");
-      if (href && !href.startsWith("#") && !href.startsWith("javascript")) {
-        link.addEventListener("click", (e) => {
-          e.preventDefault();
+        function haze() {
           const haze = document.getElementById("haze-transition");
           haze.classList.add("active");
           setTimeout(() => {
             window.location.href = href;
           }, 800);
         });
-      }
-    });
+     
   </script>
