@@ -422,26 +422,25 @@ We have a wealth of experience in providing complete turnkey packages for our cl
 
   <!-- Scripts -->
   <script>
-    // Simulate 3-second load for demo
-    window.addEventListener("load", () => {
-      setTimeout(() => {
-        document.body.classList.add("loaded");
-      }, 300);
-    });
+    // Simulated 3-second loader
+  window.addEventListener("load", () => {
+    setTimeout(() => {
+      document.body.classList.add("loaded");
+    }, 3000);
+  });
 
-    function toggleMenu() {
-      const nav = document.getElementById("navLinks");
-      const toggle = document.querySelector(".menu-toggle");
-      nav.classList.toggle("show");
-      toggle.classList.toggle("open");
-    }
+  function toggleMenu() {
+    const nav = document.getElementById("navLinks");
+    const toggle = document.querySelector(".menu-toggle");
+    nav.classList.toggle("show");
+    toggle.classList.toggle("open");
+  }
 
-        function haze() {
-          const haze = document.getElementById("haze-transition");
-          haze.classList.add("active");
-          setTimeout(() => {
-            window.location.href = href;
-          }, 800);
-        });
-     
+  function haze() {
+      const haze = document.getElementById("haze-transition");
+      haze.classList.add("active");
+        setTimeout(() => {
+          window.location.href = href;
+        }, 800);
+      });
   </script>
