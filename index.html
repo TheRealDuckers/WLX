@@ -421,26 +421,49 @@ We have a wealth of experience in providing complete turnkey packages for our cl
 </footer>
 
   <!-- Scripts -->
-  <script>
-    // Simulated 3-second loader
-  window.addEventListener("load", () => {
-    setTimeout(() => {
-      document.body.classList.add("loaded");
-    }, 3000);
-  });
 
-  function toggleMenu() {
-    const nav = document.getElementById("navLinks");
-    const toggle = document.querySelector(".menu-toggle");
-    nav.classList.toggle("show");
-    toggle.classList.toggle("open");
-  }
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    fetch("navbar.html")
+      .then(res => res.text())
+      .then(html => {
+        document.getElementById("navbar-placeholder").innerHTML = html;
 
-  function haze() {
-      const haze = document.getElementById("haze-transition");
-      haze.classList.add("active");
+        // Reattach toggleMenu
+        window.toggleMenu = () => {
+          const nav = document.getElementById("navLinks");
+          const toggle = document.querySelector(".menu-toggle");
+          nav.classList.toggle("show");
+          toggle.classList.toggle("open");
+        };
+
+        // Haze transition logic (currently disabled)
+        function enableHazeTransitions() {
+          const links = document.querySelectorAll("nav a[href]");
+          links.forEach(link => {
+            const href = link.getAttribute("href");
+            if (href && !href.startsWith("#") && !href.startsWith("javascript")) {
+              link.addEventListener("click", (e) => {
+                e.preventDefault();
+                const haze = document.getElementById("haze-transition");
+                haze.classList.add("active");
+                setTimeout(() => {
+                  window.location.href = href;
+                }, 800);
+              });
+            }
+          });
+        }
+
+        // To re-enable haze, just call:
+        // enableHazeTransitions();
+
+        // Simulated loader delay
         setTimeout(() => {
-          window.location.href = href;
-        }, 800);
+          document.body.classList.add("loaded");
+        }, 3000);
       });
-  </script>
+  });
+</script>
+
+  
