@@ -343,20 +343,44 @@ footer {
   <!-- Navigation -->
 <div id="navbar-placeholder"></div>
 <script>
-  fetch("navbar.html")
-    .then(res => res.text())
-    .then(html => document.getElementById("navbar-placeholder").innerHTML = html)
-    .then(() => {
-      // Reattach JS if needed
-      const toggleMenu = () => {
-        const nav = document.getElementById("navLinks");
-        const toggle = document.querySelector(".menu-toggle");
-        nav.classList.toggle("show");
-        toggle.classList.toggle("open");
-      };
-      window.toggleMenu = toggleMenu;
+  function jumpToCategory(category) {
+    if (!category) return;
+    const section = document.querySelector(`.category[data-category="${category}"]`);
+    if (section) {
+      section.scrollIntoView({ behavior: 'smooth' });
+    }
+  }
+
+  const categoryFilter = document.getElementById('categoryFilter');
+  const searchInput = document.getElementById('searchInput');
+
+  function filterItems() {
+    const selectedCategory = categoryFilter.value.toLowerCase();
+    const searchTerm = searchInput.value.toLowerCase();
+
+    document.querySelectorAll('.category').forEach(category => {
+      const categoryName = category.getAttribute('data-category').toLowerCase();
+      let hasVisibleItems = false;
+
+      category.querySelectorAll('.item').forEach(item => {
+        const itemText = item.textContent.toLowerCase();
+        const matchesSearch = itemText.includes(searchTerm);
+        const matchesCategory = selectedCategory === 'all' || categoryName === selectedCategory;
+
+        const shouldShow = matchesSearch && matchesCategory;
+        item.style.display = shouldShow ? '' : 'none';
+
+        if (shouldShow) hasVisibleItems = true;
+      });
+
+      category.style.display = hasVisibleItems ? '' : 'none';
     });
+  }
+
+  categoryFilter.addEventListener('change', filterItems);
+  searchInput.addEventListener('input', filterItems);
 </script>
+
 
 
 
