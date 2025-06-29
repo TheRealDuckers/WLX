@@ -804,36 +804,56 @@ We have a wealth of experience in providing complete turnkey packages for our cl
     <p id="popup-content"></p>
     <button onclick="closePopup()">Close</button>
   </div>
-
-  <script>
-    const items = document.querySelectorAll('.item');
-    const popup = document.getElementById('popup');
-    const popupContent = document.getElementById('popup-content');
-    const overlay = document.getElementById('popup-overlay');
-
-    items.forEach(item => {
-      item.addEventListener('click', () => {
-        popupContent.textContent = item.dataset.description;
-        popup.style.display = 'block';
-        overlay.style.display = 'block';
-      });
-    });
-
-    function closePopup() {
-      popup.style.display = 'none';
-      overlay.style.display = 'none';
+<script>
+  function jumpToCategory(category) {
+    if (!category) return;
+    const section = document.querySelector(`.category[data-category="${category}"]`);
+    if (section) {
+      section.scrollIntoView({ behavior: 'smooth' });
     }
+  }
 
-    overlay.addEventListener('click', closePopup);
+  const categoryFilter = document.getElementById('categoryFilter');
+  const searchInput = document.getElementById('searchInput');
 
-    document.getElementById('search').addEventListener('input', function() {
-      const query = this.value.toLowerCase();
+  function filterItems() {
+    const selectedCategory = categoryFilter.value.trim();
+    const searchTerm = searchInput.value.trim().toLowerCase();
+
+    const categories = document.querySelectorAll('.category');
+    let anyVisible = false;
+
+    categories.forEach(category => {
+      const categoryName = category.getAttribute('data-category').trim();
+      let hasVisibleItems = false;
+
+      const items = category.querySelectorAll('.item');
       items.forEach(item => {
-        const text = item.textContent.toLowerCase();
-        item.style.display = text.includes(query) ? 'block' : 'none';
+        const itemText = item.textContent.trim().toLowerCase();
+        const matchesSearch = itemText.includes(searchTerm);
+        const matchesCategory = selectedCategory === 'all' || categoryName === selectedCategory;
+
+        const shouldShow = matchesSearch && matchesCategory;
+        item.style.display = shouldShow ? '' : 'none';
+
+        if (shouldShow) hasVisibleItems = true;
       });
+
+      category.style.display = hasVisibleItems ? '' : 'none';
+      if (hasVisibleItems) anyVisible = true;
     });
-  </script>
+
+    // Optional: show a "No results" message
+    const noResults = document.getElementById('noResults');
+    if (noResults) {
+      noResults.style.display = anyVisible ? 'none' : 'block';
+    }
+  }
+
+  categoryFilter.addEventListener('change', filterItems);
+  searchInput.addEventListener('input', filterItems);
+</script>
+
 </body>
 </html>
 
