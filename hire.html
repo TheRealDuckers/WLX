@@ -805,37 +805,20 @@ We have a wealth of experience in providing complete turnkey packages for our cl
     <button onclick="closePopup()">Close</button>
   </div>
 <script>
-  function jumpToCategory(category) {
-    if (!category) return;
-    const section = document.querySelector(`.category[data-category="${category}"]`);
-    if (section) {
-      section.scrollIntoView({ behavior: 'smooth' });
-    }
-  }
-
-  const categoryFilter = document.getElementById('categoryFilter');
   const searchInput = document.getElementById('searchInput');
+  const noResults = document.getElementById('noResults');
 
   function filterItems() {
-    const selectedCategory = categoryFilter.value.trim();
-    const searchTerm = searchInput.value.trim().toLowerCase();
-
-    const categories = document.querySelectorAll('.category');
+    const searchTerm = searchInput.value.toLowerCase();
     let anyVisible = false;
 
-    categories.forEach(category => {
-      const categoryName = category.getAttribute('data-category').trim();
+    document.querySelectorAll('.category').forEach(category => {
       let hasVisibleItems = false;
 
-      const items = category.querySelectorAll('.item');
-      items.forEach(item => {
-        const itemText = item.textContent.trim().toLowerCase();
-        const matchesSearch = itemText.includes(searchTerm);
-        const matchesCategory = selectedCategory === 'all' || categoryName === selectedCategory;
-
-        const shouldShow = matchesSearch && matchesCategory;
+      category.querySelectorAll('.item').forEach(item => {
+        const itemText = item.textContent.toLowerCase();
+        const shouldShow = itemText.includes(searchTerm);
         item.style.display = shouldShow ? '' : 'none';
-
         if (shouldShow) hasVisibleItems = true;
       });
 
@@ -843,19 +826,14 @@ We have a wealth of experience in providing complete turnkey packages for our cl
       if (hasVisibleItems) anyVisible = true;
     });
 
-    // Optional: show a "No results" message
-    const noResults = document.getElementById('noResults');
-    if (noResults) {
-      noResults.style.display = anyVisible ? 'none' : 'block';
-    }
+    noResults.style.display = anyVisible ? 'none' : 'block';
   }
 
-  categoryFilter.addEventListener('change', filterItems);
   searchInput.addEventListener('input', filterItems);
 </script>
 
 </body>
-</html>
+
 
 
   
